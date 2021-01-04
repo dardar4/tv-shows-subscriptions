@@ -1,0 +1,56 @@
+create account:
+
+            validationSchema={Yup.object({
+              username: Yup.string().matches('/^(admin1)').required('Required'),
+              password: Yup.string().required('Required'),
+              /* .matches(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{4,})/,
+              'Must contain at least 4 characters, one Uppercase, one lowercase and one number'
+            ),*/
+            })}
+
+            validate={(values) => {
+              const errors = {};
+
+              if (!values.username || values.username.length < 1) {
+                errors.username = 'Required'; 
+              } else if (values.username === 'admin' || values.username === 'Admin'){
+                errors.username = 'admin is not a valid user name '; 
+              }
+              if (!values.password || values.password.length < 1) {
+                errors.password = 'Required'; 
+              }
+              return errors;
+            }}
+
+
+Add new user:
+
+          validationSchema={Yup.object({
+          firstName: Yup.string().required('Required'),
+          lastName: Yup.string().required('Required'),
+          userName: Yup.string().required('Required'),
+          sessionTO: Yup.number().min(10, 'time out must be over 10 minutes').required('Required'),
+          permission: Yup.array().required('array is empty')
+        })}
+
+
+Edit USER:
+        validate={(values) => {
+          const errors = {};
+          if (!values.firstName || values.firstName.length < 1) {
+            errors.firstName = 'Required';
+          }
+          if (!values.lastName || values.lastName.length < 1) {
+            errors.lastName = 'Required';
+          }
+          if (!values.sessionTO) {
+            errors.sessionTO = 'Required';
+          } else if (values.sessionTO < 10) {
+            errors.sessionTO = 'Session timeout must be greater than 10 minutes';
+          }
+          if (!values.permissions || values.permissions.length === 0) {
+            errors.permissions = 'Required';
+          }
+          return errors;
+        }}
