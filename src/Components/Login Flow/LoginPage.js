@@ -34,7 +34,7 @@ const LoginPageComp = (props) => {
 
   const Login = async (userName, password) => {
     // Check if userName and password are valid in the DB
-    let loginUserData = await CinemaApi.checkUserLogin(userName, password);
+    let loginUserData = await CinemaApi.invoke('checkLogin', userName, password);
 
     if (loginUserData) {
       dispatch({

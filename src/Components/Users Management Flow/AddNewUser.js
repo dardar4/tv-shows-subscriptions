@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
-
 import { UsersContext } from '../../Context/UsersContext';
-
 import FirebaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi'
 import { firebase } from '../../firebaseConfig';
-
 import * as Yup from 'yup';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import {
   Box,
   Button,
@@ -40,29 +38,21 @@ const AddNewUserComp = (props) => {
   const { setUpdateUsersList } = useContext(UsersContext);
 
   const addNewUser = async (values) => {
-    const { serverTimestamp } = firebase.firestore.FieldValue;
+    //const { serverTimestamp } = firebase.firestore.FieldValue;
 
-    let nextId = await FirebaseApi.getLastIdFromCollection('users');
+    //let nextId = await FirebaseApi.getLastIdFromCollection('users');
 
-    /* Add new user record */
-    let userDoc = {
-      id: nextId,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      createdAt: serverTimestamp(),
-      sessionTimeOut: values.sessionTO,
-    };
-    await FirebaseApi.addDocument('users', userDoc);
+    // /* Add new user record */
+    // let userDoc = {
+    //   id: nextId,
+    //   firstName: values.firstName,
+    //   lastName: values.lastName,
+    //   createdAt: serverTimestamp(),
+    //   sessionTimeOut: values.sessionTO,
+    // };
+    // await FirebaseApi.addDocument('users', userDoc);
 
-    /* Add new user login record */
-    let userLoginDoc = {
-      id: nextId,
-      userName: values.userName,
-      password: '',
-    };
-    await FirebaseApi.addDocument('usersLogin', userLoginDoc);
-
-    /* Add new permission record */
+    // Handle permission input
     if (!values.permissions.includes('View Subscriptions')) {
       if (
         values.permissions.includes('Create Subscriptions') ||
@@ -83,11 +73,33 @@ const AddNewUserComp = (props) => {
       }
     }
 
-    let userPermissionDoc = {
-      id: nextId,
+    /* Add new user record */
+    const newUserData = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      sessionTimeOut: values.sessionTO,
       permissions: values.permissions,
-    };
-    await FirebaseApi.addDocument('permissions', userPermissionDoc);
+      userName: values.userName
+    }
+
+    const addedUserData = await CinemaApi.invoke('addUser', newUserData);
+    console.log('addedUserData', addedUserData);
+    
+    // /* Add new user login record */
+    // let userLoginDoc = {
+    //   id: nextId,
+    //   userName: values.userName,
+    //   password: '',
+    // };
+    // await FirebaseApi.addDocument('usersLogin', userLoginDoc);
+
+
+
+    // let userPermissionDoc = {
+    //   id: nextId,
+    //   permissions: values.permissions,
+    // };
+    // await FirebaseApi.addDocument('permissions', userPermissionDoc);
 
     /* Navigate back to all users display */
     setTimeout(() => {
