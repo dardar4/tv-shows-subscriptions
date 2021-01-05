@@ -38,20 +38,6 @@ const AddNewUserComp = (props) => {
   const { setUpdateUsersList } = useContext(UsersContext);
 
   const addNewUser = async (values) => {
-    //const { serverTimestamp } = firebase.firestore.FieldValue;
-
-    //let nextId = await FirebaseApi.getLastIdFromCollection('users');
-
-    // /* Add new user record */
-    // let userDoc = {
-    //   id: nextId,
-    //   firstName: values.firstName,
-    //   lastName: values.lastName,
-    //   createdAt: serverTimestamp(),
-    //   sessionTimeOut: values.sessionTO,
-    // };
-    // await FirebaseApi.addDocument('users', userDoc);
-
     // Handle permission input
     if (!values.permissions.includes('View Subscriptions')) {
       if (
@@ -83,24 +69,10 @@ const AddNewUserComp = (props) => {
     }
 
     const addedUserData = await CinemaApi.invoke('addUser', newUserData);
-    console.log('addedUserData', addedUserData);
+    if(!addedUserData){
+      console.error('error adding a new user')
+    }
     
-    // /* Add new user login record */
-    // let userLoginDoc = {
-    //   id: nextId,
-    //   userName: values.userName,
-    //   password: '',
-    // };
-    // await FirebaseApi.addDocument('usersLogin', userLoginDoc);
-
-
-
-    // let userPermissionDoc = {
-    //   id: nextId,
-    //   permissions: values.permissions,
-    // };
-    // await FirebaseApi.addDocument('permissions', userPermissionDoc);
-
     /* Navigate back to all users display */
     setTimeout(() => {
       setUpdateUsersList(true);
