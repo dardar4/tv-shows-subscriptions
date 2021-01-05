@@ -1,15 +1,13 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { firestoreDB } from '../../firebaseConfig';
-import FireBaseApi from '../../Api Utils/FireBaseApi';
 import { toast } from 'react-toastify';
 import HeaderComp from '../General/Header';
+import CinemaApi from '../../Api Utils/CinemaApi';
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
 import { Box, Button, Grid, makeStyles } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
 import { LoggedInUserContext } from '../../Context/LoggedInUserContext';
-import { ToastContext } from '../../Context/ToastContext';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,12 +30,11 @@ toast.error(
 
 const LoginPageComp = (props) => {
   const { dispatch } = useContext(LoggedInUserContext);
-  const { setToastProps } = useContext(ToastContext)
   const classes = useStyles();
 
   const Login = async (userName, password) => {
     // Check if userName and password are valid in the DB
-    let loginUserData = await FireBaseApi.getLoginUser(userName, password);
+    let loginUserData = await CinemaApi.checkUserLogin(userName, password);
 
     if (loginUserData) {
       dispatch({
@@ -49,7 +46,7 @@ const LoginPageComp = (props) => {
       });
       props.history.push('/main');
     } else {
-      dispatch({ type: 'LOGOUT' });
+      dispatch({ type : 'LOGOUT' });
       wrongUserNameOrPasswordNotification();
     }
   };
@@ -119,8 +116,6 @@ const LoginPageComp = (props) => {
           </Formik>
         </Grid>
       </Grid>
-
-      
     </div>
   );
 };

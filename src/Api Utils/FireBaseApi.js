@@ -321,51 +321,6 @@ const deleteMemberData = async (memberId) => {
   }
 };
 
-const getLoginUser = async (userName, password) => {
-  let usersLoginSnapshot = await firestoreDB
-    .collection(DB_USERS_LOGIN)
-    .where('userName', '==', userName)
-    .where('password', '==', password)
-    .get();
-
-  if (!usersLoginSnapshot.empty) {
-    // user exists in DB and password is correct
-    let userLoginDoc = usersLoginSnapshot.docs[0].data();
-
-    let usersSnapshot = await firestoreDB
-      .collection(DB_USERS)
-      .where('id', '==', userLoginDoc.id)
-      .get();
-
-    let permissionsSnapshot = await firestoreDB
-      .collection(DB_USERS_PERMISSIONS)
-      .where('id', '==', userLoginDoc.id)
-      .get();
-
-    if (!usersSnapshot.empty) {
-      //get user extra data
-      let userDoc = usersSnapshot.docs[0].data();
-      return {
-        id: userDoc.id,
-        userName: userLoginDoc.userName,
-        fullName: `${userDoc.firstName} ${userDoc.lastName}`,
-        sessionTO : userDoc.sessionTimeOut,
-        isAdmin : userLoginDoc.userName === 'admin', //TODO : FIX THIS
-        permissions: permissionsSnapshot.empty
-          ? []
-          : permissionsSnapshot.docs[0].data().permissions,
-      };
-    } else {
-      console.error(`cant retrieve user: ${userName} data from DB`);
-      return false;
-    }
-  } else {
-    //user doesn't exists or password is incorrect
-    console.error(`user: ${userName} doesn't exists or password is incorrect`);
-    return false;
-  }
-};
-
 const subscribeNewMovie = async(memberId, movieName, movieId, movieDate) => {
   const snapShot = await firestoreDB
   .collection(DB_SUBSCRIPTIONS)
@@ -430,7 +385,6 @@ export default {
   getDummyAllMoviesData, //todo: delete this,
   getAllMembersData,
   deleteMemberData,
-  getLoginUser,
   subscribeNewMovie,
   getAllSubscriptions
 };
