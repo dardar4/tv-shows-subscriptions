@@ -92,43 +92,6 @@ const shouldUpdateCollection = async (collectionName) => {
   }
 };
 
-const getAllUsersData = async () => {
-  let usersSnapshot = await firestoreDB
-    .collection(DB_USERS)
-    .orderBy('id')
-    .get();
-  let usersLoginSnapshot = await firestoreDB
-    .collection(DB_USERS_LOGIN)
-    .orderBy('id')
-    .get();
-  let usersPermissionSnapshot = await firestoreDB
-    .collection(DB_USERS_PERMISSIONS)
-    .orderBy('id')
-    .get();
-
-  let usersDataArr;
-  if (!usersSnapshot.empty) {
-    usersDataArr = usersSnapshot.docs.map((doc) => {
-      let userData = doc.data();
-      return {
-        id: userData.id,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        name: userData.firstName + ' ' + userData.lastName,
-        userName: usersLoginSnapshot.empty
-          ? ''
-          : findUserNameById(userData.id, usersLoginSnapshot.docs),
-        sessionTO: userData.sessionTimeOut,
-        createdAt: userData.createdAt?.toDate(),
-        permissions: usersPermissionSnapshot.empty
-          ? []
-          : findUserPermissionById(userData.id, usersPermissionSnapshot.docs),
-      };
-    });
-    return usersDataArr;
-  }
-};
-
 const findUserNameById = (id, docs) => {
   let arr = docs.filter((doc) => doc.data().id === id);
   if (arr.length > 0) {
@@ -378,7 +341,6 @@ export default {
   deleteDocument,
   shouldUpdateCollection,
   getLastIdFromCollection,
-  getAllUsersData,
   deleteUserData,
   updateDocument,
   getAllMoviesData,

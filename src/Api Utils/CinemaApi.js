@@ -22,7 +22,7 @@ const invoke = async (action, ...params) => {
                 password : params[1] 
             });
             break;
-        case 'getAllUsers':
+        case 'getUsers':
             response = await axios.get(Cinema_URL + '/users/');
             break;
         case 'addUser':

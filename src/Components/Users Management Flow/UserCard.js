@@ -9,14 +9,6 @@ const UserCardComp = ({ data }) => {
 
   let history = useHistory();
 
-  const GetPermissionsText = (permissionsArr) => {
-    if (permissionsArr && permissionsArr.length > 0) {
-      return permissionsArr.join();
-    } else {
-      return 'None';
-    }
-  };
-
   const deleteUser = async () => {
     await FirebaseApi.deleteUserData(data.id);
     setUpdateUsersList(true);
@@ -39,9 +31,9 @@ const UserCardComp = ({ data }) => {
       ID : {data.id} <br />
       Name: {data.firstName + ' ' + data.lastName} <br />
       User Name: {data.userName} <br />
-      Session Time Out (in minutes): {data.sessionTO} <br />
-      Created Date: {data.createdAt?.toString()} <br />
-      Permissions: {/*{GetPermissionsText(data.permissions)}*/}
+      Session Time Out (in minutes): {data.sessionTimeOut} <br />
+      Created Date: {data.createdDate} <br />
+      Permissions:
       <ul>
         {data.permissions.map((p, index) => {
           return <li key={index}>{p}</li>

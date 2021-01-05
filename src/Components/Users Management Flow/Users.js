@@ -9,6 +9,7 @@ const UsersComp = (props) => {
   const { users, setUpdateUsersList } = useContext(UsersContext);
 
   useEffect(() => {
+    console.log('usersComp:', users);
     setUpdateUsersList(true);
   }, []);
 
@@ -29,7 +30,7 @@ const UsersComp = (props) => {
       </div>
 
       {users.map((userData) => {
-        if (userData.userName !== 'admin') {
+        if (!userData.isAdmin) {
           return <UserCardComp key={userData.id} data={userData} />;
         }
       })}
