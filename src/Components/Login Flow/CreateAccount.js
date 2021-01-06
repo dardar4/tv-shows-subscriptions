@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { firestoreDB } from '../../firebaseConfig'
+import CinemaApi from '../../Api Utils/CinemaApi';
 import HeaderComp from '../General/Header';
 import { toast } from 'react-toastify';
-import ToastWrapperComp from '../General/ToastWrapper';
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
 import { Box, Button, Grid } from '@material-ui/core';
@@ -37,22 +37,9 @@ const CreateAccountComp = (props) => {
     toast.success(`Password was updated and account is ready to use 😎`);
 
   const createAccount = async (userName, newPassword) => {
-    /* Check if the user name is in the DB (i.e the admin added this user) */
-    let usersLoginRef = firestoreDB.collection('usersLogin');
-    if (usersLoginRef) {
-      let usersLoginSnapshot = await usersLoginRef
-        .where('userName', '==', userName)
-        .get();
+      const response = CinemaApi.invoke('createAccount', userName, newPassword);
 
-      if (usersLoginSnapshot.docs.length > 0) {
-        // update the password
-        usersLoginRef.doc(usersLoginSnapshot.docs[0].id).set(
-          {
-            password: newPassword,
-          },
-          { merge: true }
-        );
-
+      if (response) {
         // Show success notification
         setToastProps({
           autoClose : notificationTimeOut
@@ -70,9 +57,6 @@ const CreateAccountComp = (props) => {
         })
         wrongUserNameNotification();
       }
-    } else {
-      console.error(`can't get reference to usersLogin collection`);
-    }
   };
 
   const backToLoginPage = () => {

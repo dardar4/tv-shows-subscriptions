@@ -18,10 +18,16 @@ const invoke = async (action, ...params) => {
 
     switch (action) {
         case 'checkLogin':
-            response = await axios.post(`${Cinema_URL}/login`, {
+            response = await axios.post(`${Cinema_URL}/account/login`, {
                 userName : params[0],
                 password : params[1] 
             });
+            break;
+        case 'createAccount':
+            response = await axios.post(`${Cinema_URL}/account/create`, {
+                userName : params[0],
+                newPassword : params[1] 
+            })
             break;
         case 'getUsers':
             response = await axios.get(Cinema_URL + '/users/');
