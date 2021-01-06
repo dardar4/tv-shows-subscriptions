@@ -9,7 +9,6 @@ const UsersComp = (props) => {
   const { users, setUpdateUsersList } = useContext(UsersContext);
 
   useEffect(() => {
-    console.log('usersComp:', users);
     setUpdateUsersList(true);
   }, []);
 
