@@ -14,6 +14,7 @@ const handleResponse = (response) => {
 
 const invoke = async (action, ...params) => {
     let response = null;
+    let userData = null;
 
     switch (action) {
         case 'checkLogin':
@@ -26,8 +27,12 @@ const invoke = async (action, ...params) => {
             response = await axios.get(Cinema_URL + '/users/');
             break;
         case 'addUser':
-            const userData = params[0];
+            userData = params[0];
             response = await axios.post(Cinema_URL + '/users/', userData);
+            break;
+        case 'updateUser':
+            userData = params[0];
+            response = await axios.patch(`${Cinema_URL}/users/${userData.id}`, userData);
             break;
         case 'deleteUser':
             const userId = params[0];

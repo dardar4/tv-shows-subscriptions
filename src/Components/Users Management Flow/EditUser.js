@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
-
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
-
-import FirebaseApi from '../../Api Utils/FireBaseApi';
-
+import CinemaApi from '../../Api Utils/CinemaApi';
 import {
   Box,
   Button,
@@ -14,8 +11,6 @@ import {
   InputLabel,
   makeStyles,
   MenuItem,
-  Paper,
-  Typography,
 } from '@material-ui/core';
 import { Select, TextField } from 'formik-material-ui';
 import { UsersContext } from '../../Context/UsersContext';
@@ -44,31 +39,8 @@ const EditUserComp = (props) => {
   const { userToEdit, setUpdateUsersList } = useContext(UsersContext);
 
   const editUserData = async (values) => {
-    /* Update the user document */
-    if (
-      userToEdit.firstName !== values.firstName ||
-      userToEdit.lastName !== values.lastName ||
-      userToEdit.sessionTO !== values.sessionTO
-    ) {
-      let updatedUserDoc = {
-        id: userToEdit.id,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        sessionTimeOut: values.sessionTO,
-      };
-      await FirebaseApi.updateDocument('users', updatedUserDoc);
-    }
 
-    /* Update the userName */
-    if (userToEdit.userName !== values.userName) {
-      let updatedUserLoginDoc = {
-        id: userToEdit.id,
-        userName: values.userName,
-      };
-      await FirebaseApi.updateDocument('usersLogin', updatedUserLoginDoc);
-    }
-
-    /* Add new permission record */
+    // setup permission array
     if (!values.permissions.includes('View Subscriptions')) {
       if (
         values.permissions.includes('Create Subscriptions') ||
@@ -89,12 +61,23 @@ const EditUserComp = (props) => {
       }
     }
 
-    if (!arraysEqual(values.permissions, userToEdit.permissions)) {
-      let userPermissionDoc = {
+    // Check if any field was changes (avoid updating id not needed)
+    const needToUpdateUser = 
+      userToEdit.firstName !== values.firstName ||
+      userToEdit.lastName !== values.lastName ||
+      userToEdit.sessionTimeOut !== values.sessionTimeOut ||
+      !arraysEqual(values.permissions, userToEdit.permissions) ;
+
+    if (needToUpdateUser) {
+      let updatedUserData = {
         id: userToEdit.id,
-        permissions: values.permissions,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        sessionTimeOut: values.sessionTO,
+        permissions : values.permissions
+
       };
-      await FirebaseApi.updateDocument('permissions', userPermissionDoc);
+      await CinemaApi.invoke('updateUser', updatedUserData);
     }
 
     /* Navigate back to all users display */
@@ -118,8 +101,8 @@ const EditUserComp = (props) => {
           firstName: userToEdit.firstName,
           lastName: userToEdit.lastName,
           userName: userToEdit.userName,
-          sessionTO: userToEdit.sessionTO,
-          createdAt: userToEdit.createdAt,
+          sessionTO: userToEdit.sessionTimeOut,
+          createdDate: userToEdit.createdDate,
           permissions: userToEdit.permissions ? userToEdit.permissions : [],
         }}
         validationSchema={Yup.object({
@@ -182,7 +165,7 @@ const EditUserComp = (props) => {
               <Field
                 component={TextField}
                 disabled
-                name="createdAt"
+                name="createdDate"
                 type="text"
                 label="Created Date"
                 style={{width: 200}}

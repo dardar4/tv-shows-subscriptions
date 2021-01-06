@@ -16,6 +16,7 @@ const UserCardComp = ({ data }) => {
   };
 
   const editUser = () => {
+    console.log('user to edit:', data);
     setUserToEdit(data);
     history.push('/main/users/edit');
   };
