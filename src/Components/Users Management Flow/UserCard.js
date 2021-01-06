@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { UsersContext } from '../../Context/UsersContext';
-import FirebaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi'
 import { Button } from '@material-ui/core';
 
 const UserCardComp = ({ data }) => {
@@ -10,7 +10,8 @@ const UserCardComp = ({ data }) => {
   let history = useHistory();
 
   const deleteUser = async () => {
-    await FirebaseApi.deleteUserData(data.id);
+    await CinemaApi.invoke('deleteUser', data.id);
+
     setUpdateUsersList(true);
   };
 

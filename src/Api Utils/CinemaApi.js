@@ -26,7 +26,12 @@ const invoke = async (action, ...params) => {
             response = await axios.get(Cinema_URL + '/users/');
             break;
         case 'addUser':
-            response = await axios.post(Cinema_URL + '/users/', params[0]);
+            const userData = params[0];
+            response = await axios.post(Cinema_URL + '/users/', userData);
+            break;
+        case 'deleteUser':
+            const userId = params[0];
+            response = await axios.delete(`${Cinema_URL}/users/${userId}`);
             break;
         default:
             console.warn(`Cinema Api action=${action} is not supported`)
