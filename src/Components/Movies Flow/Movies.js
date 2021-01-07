@@ -42,16 +42,6 @@ const MoviesComp = () => {
     
   }, []);
 
-  // useEffect(() => {
-  //     setUpdateMoviesList(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log('bbbbbbbbbb');
-  //   console.log(movies);
-  //   initMoviesSubsMap();
-  // }, [updateMoviesList]);
-
   const initMoviesSubsMap = async() => {
     let map = new Map();
     let subsArr = await FirebaseApi.getAllSubscriptions();
@@ -75,7 +65,7 @@ const MoviesComp = () => {
             })
           }
       })
-      map[movie.id] = movieSubsArr;
+      map[movie.showID] = movieSubsArr;
       setMovieSubsMap(map);
     });
   }
@@ -163,7 +153,7 @@ const MoviesComp = () => {
         <Grid container spacing={5}>
           {getMovies().map((movieData) => {
             return (
-              <Grid item xs={12} sm={6} md={4} key={movieData.id}>
+              <Grid item xs={12} sm={6} md={4} key={movieData.showID}>
                   <MovieCardComp
                     data={movieData}
                     subscribers={movieSubsMap[movieData.id]}

@@ -12,7 +12,7 @@ const UsersContextProvider = (props) => {
   useEffect(() => {
     const getAllUsersData = async () => {
       const usersDataArr = await CinemaApi.invoke('getUsers');
-      setUsers(usersDataArr ?? null);
+      setUsers(usersDataArr ?? []);
       setUpdateUsersList(false);
     };
 

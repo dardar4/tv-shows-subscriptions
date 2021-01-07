@@ -1,3 +1,7 @@
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import FireBaseApi from '../../Api Utils/FireBaseApi';
+import { MoviesContext } from '../../Context/MoviesContext';
 import {
   Button,
   Card,
@@ -9,18 +13,8 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
-import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-import FireBaseApi from '../../Api Utils/FireBaseApi';
-import { MoviesContext } from '../../Context/MoviesContext';
-
-const GetGenresText = (genresArr) => {
-  if (genresArr && genresArr.length > 0) {
-    return genresArr.join();
-  } else {
-    return 'Genres data not available ';
-  }
-};
+import parse from 'date-fns/parse'
+import format from 'date-fns/format'
 
 const useStyles = makeStyles({
   root: {
@@ -56,19 +50,28 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
     history.push('/main/movies/edit');
   };
 
+  const formatDate = (date) => {
+    var result = parse(
+      date,
+      `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'`,
+      new Date()
+    );
+    return format(result, 'dd.MM.yyyy');
+  }
+
   return (
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={data.image}
+          image={data.imageURL}
           title="Movie Image"
         />
       </CardActionArea>
       <CardContent>
         <Paper>
           <Typography gutterBottom variant="h5" component="h2" align="center">
-            {data.name}
+            #{data.showID} {data.name}
           </Typography>
         </Paper>
         <Typography variant="subtitle2" color="textPrimary" component="p" />
@@ -80,7 +83,7 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
         </ul>
 
         <Typography variant="subtitle2" color="textPrimary" component="p">
-          Premiered: {data.premiered?.toString()}
+          Premiered: {formatDate(data.premiered)}
         </Typography>
 
         <br/>

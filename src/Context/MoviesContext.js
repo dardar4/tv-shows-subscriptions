@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import FirebaseApi from '../Api Utils/FireBaseApi';
+import CinemaApi from '../Api Utils/CinemaApi';
 
 export const MoviesContext = createContext();
 
@@ -11,9 +12,9 @@ const MoviesContextProvider = (props) => {
 
   useEffect(() => {
     const getAllMoviesData = async () => {
-      const moviesDataArr = await FirebaseApi.getAllMoviesData();
-      //const moviesDataArr = await FirebaseApi.getDummyAllMoviesData();
-      setMovies(moviesDataArr);
+      const moviesDataArr = await CinemaApi.invoke('getShows');
+
+      setMovies(moviesDataArr ?? []);
       setUpdateMoviesList(false);
     };
 
