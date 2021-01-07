@@ -9,9 +9,9 @@ const MoviesMainComp = () => {
     return (
         <Switch>
             <Route path="/main/movies" exact component={MoviesComp}></Route>
-            <Route path="/main/movies/:movieName" component={MoviesComp}></Route>
             <Route path="/main/movies/add" component={AddNewMovieComp}></Route>
             <Route path="/main/movies/edit" component={EditMovieComp}></Route>
+            <Route path="/main/movies/:movieName" component={MoviesComp}></Route>
         </Switch>
     );
 };

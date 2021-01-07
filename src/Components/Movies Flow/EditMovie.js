@@ -62,7 +62,7 @@ const EditMovieComp = (props) => {
       <Formik
         initialValues={{
           name: movieToEdit.name,
-          imageUrl: movieToEdit.image,
+          imageUrl: movieToEdit.imageURL,
           premiered: movieToEdit.premiered,
           genres: movieToEdit.genres?.join(),
         }}

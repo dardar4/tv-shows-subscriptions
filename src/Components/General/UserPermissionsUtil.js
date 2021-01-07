@@ -19,7 +19,7 @@ const canViewUsersManagement = (user) => {
 
 const validatePermission = (user, permissionType) => {
   if (user) {
-    if (isAdmin()) {
+    if (isAdmin(user)) {
       // Admin can do everything!
       return true;
     } else {

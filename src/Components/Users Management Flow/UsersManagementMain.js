@@ -1,11 +1,8 @@
 import React from 'react';
-
 import AddNewUserComp from './AddNewUser';
 import UsersComp from './Users';
 import EditUserComp from './EditUser';
-
 import { Route, Switch } from 'react-router-dom';
-import { Grid } from '@material-ui/core';
 
 const UsersManagementMainComp = () => {
   return (

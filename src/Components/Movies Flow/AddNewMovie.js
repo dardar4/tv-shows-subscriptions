@@ -7,9 +7,9 @@ import { Field, Form, Formik } from 'formik';
 import { Box, Button, Grid } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
 import SectionTitleComp from '../General/SectionTitle';
-import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { DatePicker, KeyboardDatePicker } from 'formik-material-ui-pickers';
+import { KeyboardDatePicker } from 'formik-material-ui-pickers';
 
 const parseGenres = (genresStr) => {
   return genresStr.split(',').filter((g) => g != '');
