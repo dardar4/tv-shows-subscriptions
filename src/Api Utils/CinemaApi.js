@@ -56,6 +56,10 @@ const invoke = async (action, ...params) => {
             showData = params[0];
             response = await axios.patch(`${Cinema_URL}/shows/${showData.showID}`, showData);
             break;
+        case 'deleteShow':
+            const showID = params[0];
+            response = await axios.delete(`${Cinema_URL}/shows/${showID}`);
+            break;
         default:
             console.warn(`Cinema Api action=${action} is not supported`)
             return null;

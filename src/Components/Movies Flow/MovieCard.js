@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import FireBaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi';
 import { MoviesContext } from '../../Context/MoviesContext';
 import {
   Button,
@@ -39,7 +39,7 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
   const { setUpdateMoviesList, setMovieToEdit } = useContext(MoviesContext);
 
   const deleteMovie = async () => {
-    await FireBaseApi.deleteDocument('movies', data.id, true);
+    await CinemaApi.invoke('deleteShow', data.showID);
     setTimeout(() => {
       setUpdateMoviesList(true);
     }, 200);
