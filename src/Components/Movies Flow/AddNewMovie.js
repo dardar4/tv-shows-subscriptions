@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { MoviesContext } from '../../Context/MoviesContext';
-import FirebaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { Box, Button, Grid } from '@material-ui/core';
@@ -23,13 +22,12 @@ const AddNewMovieComp = (props) => {
   const addNewMovie = async (values) => {
     /* Add new movie record */
     let movieDoc = {
-      id: uuidv4(),
       name: values.name,
-      image: values.imageUrl,
+      imageURL: values.imageUrl,
       premiered: new Date(values.premiered.toDateString()),
       genres: parseGenres(values.genres),
     };
-    await FirebaseApi.addDocument('movies', movieDoc, true);
+    await CinemaApi.invoke('addShow', movieDoc, true);
 
     /* Navigate back to all users display */
     setTimeout(() => {

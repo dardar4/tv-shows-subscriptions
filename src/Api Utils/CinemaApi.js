@@ -15,6 +15,7 @@ const handleResponse = (response) => {
 const invoke = async (action, ...params) => {
     let response = null;
     let userData = null;
+    let showData = null;
 
     switch (action) {
         case 'checkLogin':
@@ -46,6 +47,10 @@ const invoke = async (action, ...params) => {
             break;
         case 'getShows':
             response = await axios.get(Cinema_URL + '/shows');
+            break;
+        case 'addShow':
+            showData = params[0];
+            response = await axios.post(Cinema_URL + '/shows/', showData);
             break;
         default:
             console.warn(`Cinema Api action=${action} is not supported`)
