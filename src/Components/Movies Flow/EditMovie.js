@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { MoviesContext } from '../../Context/MoviesContext';
 import FirebaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { Box, Button, Grid } from '@material-ui/core';
@@ -35,13 +36,13 @@ const EditMovieComp = (props) => {
       !arraysEqual(movieToEdit.genres, genresArr)
     ) {
       let updatedMovieDoc = {
-        id: movieToEdit.id,
+        showID: movieToEdit.showID,
         name: values.name,
-        image: values.imageUrl,
+        imageURL: values.imageURL,
         premiered: values.premiered,
         genres: genresArr,
       };
-      await FirebaseApi.updateDocument('movies', updatedMovieDoc);
+      await CinemaApi.invoke('updateShow', updatedMovieDoc);
     }
 
     /* Navigate back to all movies display */
@@ -62,7 +63,7 @@ const EditMovieComp = (props) => {
       <Formik
         initialValues={{
           name: movieToEdit.name,
-          imageUrl: movieToEdit.imageURL,
+          imageURL: movieToEdit.imageURL,
           premiered: movieToEdit.premiered,
           genres: movieToEdit.genres?.join(),
         }}
@@ -104,7 +105,7 @@ const EditMovieComp = (props) => {
               <Box margin={1}>
                 <Field
                   component={TextField}
-                  name="imageUrl"
+                  name="imageURL"
                   type="text"
                   label="Image Url"
                   style={{ width: 200 }}
