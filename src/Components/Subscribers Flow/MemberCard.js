@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { MembersContext } from '../../Context/MembersContext';
 import FirebaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi';
 import {
   Button,
   Dialog,
@@ -28,12 +29,11 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   let history = useHistory();
 
   const deleteMember = async () => {
-    await FirebaseApi.deleteMemberData(data.id);
+    await CinemaApi.invoke('deleteMember', data._id); 
     setUpdateMembersList(true);
   };
 
   const editMember = () => {
-    console.log('data:', data);
     setMemberToEdit(data);
     history.push('/main/members/edit');
   };
@@ -77,10 +77,12 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const getUnseenMovies = () => {
-    if (movies.length === 0) return [];
+    //no movies - nothing to return
+    if (movies?.length === 0) return [];
 
+    //
     let allMoviesName = movies.map((movie) => movie.name);
-    if (data.moviesSubscriptions.length == 0) {
+    if (!data.moviesSubscriptions ||  data.moviesSubscriptions.length == 0) {
       /* Return all movies */
       return allMoviesName;
     }
@@ -105,6 +107,10 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const getFutureMovies = () => {
+    if(!data.moviesSubscriptions){
+      return [];
+    }
+
     let futureSubscriptions = data.moviesSubscriptions?.filter((ms) => {
       return ms.date >= new Date();
     });
@@ -120,6 +126,10 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const getPastMovies = () => {
+    if(!data.moviesSubscriptions){
+      return [];
+    }
+
     let pastSubscriptions = data.moviesSubscriptions?.filter((ms) => {
       return ms.date < new Date();
     });
@@ -144,7 +154,7 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
       }}
     >
       <label>ID: </label>
-      {data.id} <br />
+      {data._id} <br />
       <label>Name: </label>
       {data.name} <br />
       <label>Email: </label>

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { MembersContext } from '../../Context/MembersContext';
-import FirebaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { Box, Button, Grid } from '@material-ui/core';
@@ -12,19 +12,18 @@ const EditMemberComp = (props) => {
   const { memberToEdit, setUpdateMembersList } = useContext(MembersContext);
 
   const editMemberData = async (values) => {
-    /* Update the member document */
+    /* Update the member item */
     if (
         memberToEdit.name !== values.name ||
         memberToEdit.image !== values.email ||
         memberToEdit.premiered !== values.city) {
 
-      let updatedMemberDoc = {
-        id: memberToEdit.id,
+      let updatedMemberData = {
         name: values.name,
         email: values.email,
         city: values.city,
       };
-      await FirebaseApi.updateDocument('members', updatedMemberDoc);
+      await CinemaApi.invoke('updateMember',  memberToEdit._id, updatedMemberData);
     }
 
     /* Navigate back to all movies display */

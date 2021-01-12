@@ -1,25 +1,23 @@
 import React, { useContext } from 'react';
 import { MembersContext } from '../../Context/MembersContext';
-import FirebaseApi from '../../Api Utils/FireBaseApi';
+import CinemaApi from '../../Api Utils/CinemaApi';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { Box, Button, Grid } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
 import SectionTitleComp from '../General/SectionTitle';
-import { v4 as uuidv4 } from 'uuid';
 
 const AddNewMemberComp = (props) => {
   const { setUpdateMembersList } = useContext(MembersContext);
 
   const addNewMember = async (values) => {
     /* add a member document */
-    let memberDoc = {
-      id: uuidv4(),
+    const memberData = {
       name: values.name,
       email: values.email,
       city: values.city,
     };
-    await FirebaseApi.addDocument('members', memberDoc, true);
+    await CinemaApi.invoke('addMember', memberData);
 
     /* Navigate back to all movies display */
     setTimeout(() => {

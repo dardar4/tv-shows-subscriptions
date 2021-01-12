@@ -61,7 +61,7 @@ const MembersComp = (props) => {
 
       {members.map((memberData) => {
           return <MemberCardComp 
-          key={memberData.id} 
+          key={memberData._id} 
           data={memberData}                 
           canEditMemberCBF={canEditMember}
           canDeleteMemberCBF={canDeleteMember}

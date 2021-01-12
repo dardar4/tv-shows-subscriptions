@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import FirebaseApi from '../Api Utils/FireBaseApi';
+import CinemaApi from '../Api Utils/CinemaApi';
 
 export const MembersContext = createContext();
 
@@ -11,8 +12,8 @@ const MembersContextProvider = (props) => {
 
   useEffect(() => {
     const getAllMembersData = async () => {
-      const membersDataArr = await FirebaseApi.getAllMembersData();
-      setMembers(membersDataArr);
+      const membersDataArr = await CinemaApi.invoke('getMembers');
+      setMembers(membersDataArr ?? []);
       setUpdateMembersList(false);
     };
 
