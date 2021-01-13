@@ -48,23 +48,36 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const subscribeNewMovie = async() => {
+    console.log('subscribeNewMovie', data);
     /* find movie id from movie name*/
-    let movieId = movies.filter(
-      (movie) => movie.name.toLowerCase() === selectedMovie.toLowerCase()
-    )[0].id;
+    let show = movies.filter( (movie) => {
+      return movie.name.toLowerCase() === selectedMovie.toLowerCase() 
+    })[0];
 
 
-    if (selectedDate === null) {
-      await setSelectedDate(new Date());
+
+    // Add the selected show to the existing member shows array
+    let newShowsArr = [...data.showsSubscriptions, {
+      name : show.name,
+      showID : show.showID,
+      date : selectedDate ?? new Date()
+    }]
+
+    const subscribeShowData = {
+      memberID : data._id,
+      shows : newShowsArr
+  }
+
+    if(data.showsSubscriptions.length === 0) {
+      // member has no active shows subscriptions.
+      // need to CREATE the member shows subscription list
+      await CinemaApi.invoke('createShowSubscription', subscribeShowData);
     }
-
-    /* update new movie subscriptions in the DB */
-    FirebaseApi.subscribeNewMovie(
-      data.id,
-      selectedMovie,
-      movieId,
-      (selectedDate === null) ? new Date() : selectedDate
-    );
+    else{
+      // member has active shows subscriptions.
+      // need to UPDATE the member shows subscription list
+      await CinemaApi.invoke('updateShowSubscription', data._id, subscribeShowData);
+    }
 
     setUpdateMembersList(true);
     handleClose();
@@ -77,18 +90,20 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const getUnseenMovies = () => {
+    
     //no movies - nothing to return
     if (movies?.length === 0) return [];
 
-    //
+
     let allMoviesName = movies.map((movie) => movie.name);
-    if (!data.moviesSubscriptions ||  data.moviesSubscriptions.length == 0) {
+    if (!data.showsSubscriptions ||  data.showsSubscriptions.length == 0) {
       /* Return all movies */
       return allMoviesName;
     }
 
+
     /* Return only movies that the member didn't watch yet */
-    let seenMoviesName = data.moviesSubscriptions.map((movie) => movie.name);
+    let seenMoviesName = data.showsSubscriptions.map((showSub) => showSub.name);
     let unseenMovies = allMoviesName.filter((movieName) => {
       return !seenMoviesName.includes(movieName);
     });
@@ -107,38 +122,38 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const getFutureMovies = () => {
-    if(!data.moviesSubscriptions){
+    if(!data.showsSubscriptions){
       return [];
     }
-
-    let futureSubscriptions = data.moviesSubscriptions?.filter((ms) => {
-      return ms.date >= new Date();
+    
+    let futureSubscriptions = data.showsSubscriptions?.filter((showSub) => {
+      return new Date(showSub.date) >= new Date();
     });
 
-    return futureSubscriptions.map((ms) => {
+    return futureSubscriptions.map((showSub) => {
       return (
-        <li key={ms.id}>
-          <Link to={buildMovieUrl(ms.name)}>{ms.name}</Link>,{' '}
-          {ms.date.toLocaleDateString()}
+        <li key={showSub._id}>
+          <Link to={buildMovieUrl(showSub.name)}>{showSub.name}</Link>,{' '}
+          {showSub.date}
         </li>
       );
     });
   };
 
   const getPastMovies = () => {
-    if(!data.moviesSubscriptions){
+    if(!data.showsSubscriptions){
       return [];
     }
 
-    let pastSubscriptions = data.moviesSubscriptions?.filter((ms) => {
-      return ms.date < new Date();
+    let pastSubscriptions = data.showsSubscriptions?.filter((showSub) => {
+      return new Date(showSub.date) < new Date();
     });
 
-    return pastSubscriptions.map((ms) => {
+    return pastSubscriptions.map((showSub) => {
       return (
-        <li key={ms.id}>
-          <Link to={buildMovieUrl(ms.name)}>{ms.name}</Link>,{' '}
-          {ms.date.toLocaleDateString()}
+        <li key={showSub._id}>
+          <Link to={buildMovieUrl(showSub.name)}>{showSub.name}</Link>,{' '}
+          {showSub.date}
         </li>
       );
     });

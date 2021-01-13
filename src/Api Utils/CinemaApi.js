@@ -14,9 +14,6 @@ const handleResponse = (response) => {
 
 const invoke = async (action, ...params) => {
     let response = null;
-    //let userData = null;
-    //let showData = null;
-    //let memberData = null;
 
     switch (action) {
         case 'checkLogin':
@@ -103,6 +100,19 @@ const invoke = async (action, ...params) => {
         {
             const memberId = params[0];
             response = await axios.delete(`${Cinema_URL}/members/${memberId}`);
+            break;
+        }
+        case 'createShowSubscription':
+        {
+            const subscribeShowData = params[0];
+            response = await axios.post(`${Cinema_URL}/subscriptions`, subscribeShowData);
+            break;
+        }
+        case 'updateShowSubscription':
+        {
+            const memberID = params[0];
+            const subscribeShowData = params[1];
+            response = await axios.patch(`${Cinema_URL}/subscriptions/${memberID}`, subscribeShowData);
             break;
         }
         default:
