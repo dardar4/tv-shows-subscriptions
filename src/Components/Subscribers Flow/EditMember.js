@@ -26,7 +26,7 @@ const EditMemberComp = (props) => {
       await CinemaApi.invoke('updateMember',  memberToEdit._id, updatedMemberData);
     }
 
-    /* Navigate back to all movies display */
+    /* Navigate back to all members display */
     setTimeout(() => {
         setUpdateMembersList(true);
       backToMembersList();

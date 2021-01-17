@@ -3,10 +3,10 @@
   'Create Subscriptions'
   'Delete Subscriptions
   'Update Subscriptions'
-  'View Movies'
-  'Create Movies'
-  'Delete Movies'
-  'Update Movies'
+  'View Shows'
+  'Create Shows'
+  'Delete Shows'
+  'Update Shows'
 */
 
 const isAdmin = (user) => {

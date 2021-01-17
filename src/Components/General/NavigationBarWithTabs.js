@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { AppBar, Grid, makeStyles, Tab, Tabs } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import MoviesMainComp from '../Movies Flow/MoviesMain';
+import ShowsMainComp from '../Shows Flow/ShowsMain';
 import UsersManagementMainComp from '../Users Management Flow/UsersManagementMain';
 import SubscribersMainComp from '../Subscribers Flow/SubscribersMain';
 import { LoggedInUserContext } from '../../Context/LoggedInUserContext';
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const indexToTabName = {
-  0: 'movies',
+  0: 'shows',
   1: 'members',
   2: 'users',
 };
@@ -51,8 +51,8 @@ const NavigationBarWithTabsComp = () => {
     if(UserPermissionUtil.canViewUsersManagement(loggedInUser)){
       history.push(`/main/users`);
       setSelectedTab(2);
-    } else if(UserPermissionUtil.validatePermission(loggedInUser, 'View Movies')){
-      history.push(`/main/movies`);
+    } else if(UserPermissionUtil.validatePermission(loggedInUser, 'View Shows')){
+      history.push(`/main/shows`);
       setSelectedTab(0);
     } else if(UserPermissionUtil.validatePermission(loggedInUser, 'View Subscriptions')){
       history.push(`/main/members`);
@@ -74,10 +74,10 @@ const NavigationBarWithTabsComp = () => {
             disabled={
               !UserPermissionUtil.validatePermission(
                 loggedInUser,
-                'View Movies'
+                'View Shows'
               )
             }
-            label="Movies"
+            label="Shows"
           ></Tab>
           <Tab
             disabled={
@@ -104,7 +104,7 @@ const NavigationBarWithTabsComp = () => {
         ></Grid>
         <Grid item xs={12} sm={8} container direction="column" className={classes.gridItem}>
             <Switch>
-              <Route path="/main/movies" component={MoviesMainComp} />
+              <Route path="/main/shows" component={ShowsMainComp} />
               <Route path="/main/members" component={SubscribersMainComp} />
               <Route path="/main/users" component={UsersManagementMainComp} />
             </Switch>

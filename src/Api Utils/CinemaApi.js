@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const Cinema_URL = 'http://localhost:9000/api'
+const CINEMA_API_URL = 'http://localhost:9000/api'
 
 const handleResponse = (response) => {
     //console.log('CinemaApi::handleResponse', response); //TODO: delete of better logger ?
@@ -18,7 +18,7 @@ const invoke = async (action, ...params) => {
     switch (action) {
         case 'checkLogin':
         {
-            response = await axios.post(`${Cinema_URL}/account/login`, {
+            response = await axios.post(`${CINEMA_API_URL}/account/login`, {
                 userName : params[0],
                 password : params[1] 
             });
@@ -26,7 +26,7 @@ const invoke = async (action, ...params) => {
         }
         case 'createAccount':
         {
-            response = await axios.post(`${Cinema_URL}/account/create`, {
+            response = await axios.post(`${CINEMA_API_URL}/account/create`, {
                 userName : params[0],
                 newPassword : params[1] 
             })
@@ -34,90 +34,90 @@ const invoke = async (action, ...params) => {
         }
         case 'getUsers':
         {
-            response = await axios.get(Cinema_URL + '/users');
+            response = await axios.get(CINEMA_API_URL + '/users');
             break;
         }
         case 'addUser':
         {
             const userData = params[0];
-            response = await axios.post(Cinema_URL + '/users/', userData);
+            response = await axios.post(CINEMA_API_URL + '/users/', userData);
             break;
         }
         case 'updateUser':
         {
             const userData = params[0];
-            response = await axios.patch(`${Cinema_URL}/users/${userData.id}`, userData);
+            response = await axios.patch(`${CINEMA_API_URL}/users/${userData.id}`, userData);
             break;
         }
         case 'deleteUser':
         {
             const userId = params[0];
-            response = await axios.delete(`${Cinema_URL}/users/${userId}`);
+            response = await axios.delete(`${CINEMA_API_URL}/users/${userId}`);
             break;
         }
         case 'getShows':
         {
-            response = await axios.get(Cinema_URL + '/shows');
+            response = await axios.get(CINEMA_API_URL + '/shows');
             break;
         }
         case 'addShow':
         {
             const showData = params[0];
-            response = await axios.post(Cinema_URL + '/shows/', showData);
+            response = await axios.post(CINEMA_API_URL + '/shows/', showData);
             break;
         }
         case 'updateShow':
         {
             const showData = params[0];
-            response = await axios.patch(`${Cinema_URL}/shows/${showData.showID}`, showData);
+            response = await axios.patch(`${CINEMA_API_URL}/shows/${showData.showID}`, showData);
             break;
         }
         case 'deleteShow':
         {
             const showID = params[0];
-            response = await axios.delete(`${Cinema_URL}/shows/${showID}`);
+            response = await axios.delete(`${CINEMA_API_URL}/shows/${showID}`);
             break;
         }
         case 'getMembers':
         {
-            response = await axios.get(`${Cinema_URL}/members`);
+            response = await axios.get(`${CINEMA_API_URL}/members`);
             break;
         }
         case 'addMember': 
         {
             const memberData = params[0];
-            response = await axios.post(`${Cinema_URL}/members`, memberData);
+            response = await axios.post(`${CINEMA_API_URL}/members`, memberData);
             break;
         }
         case 'updateMember':
         {
             const memberId = params[0];
             const memberData = params[1];
-            response = await axios.patch(`${Cinema_URL}/members/${memberId}`, memberData);
+            response = await axios.patch(`${CINEMA_API_URL}/members/${memberId}`, memberData);
             break;
         }
         case 'deleteMember':
         {
             const memberId = params[0];
-            response = await axios.delete(`${Cinema_URL}/members/${memberId}`);
+            response = await axios.delete(`${CINEMA_API_URL}/members/${memberId}`);
             break;
         }
         case 'createShowSubscription':
         {
             const subscribeShowData = params[0];
-            response = await axios.post(`${Cinema_URL}/subscriptions`, subscribeShowData);
+            response = await axios.post(`${CINEMA_API_URL}/subscriptions`, subscribeShowData);
             break;
         }
         case 'updateShowSubscription':
         {
             const memberID = params[0];
             const subscribeShowData = params[1];
-            response = await axios.patch(`${Cinema_URL}/subscriptions/${memberID}`, subscribeShowData);
+            response = await axios.patch(`${CINEMA_API_URL}/subscriptions/${memberID}`, subscribeShowData);
             break;
         }
         case 'getSubscriptions':
         {
-            response = await axios.get(`${Cinema_URL}/subscriptions`);
+            response = await axios.get(`${CINEMA_API_URL}/subscriptions`);
             break;
         }
         default:

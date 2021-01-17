@@ -12,20 +12,19 @@ import {
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
 import {
-  DatePicker,
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import { MoviesContext } from '../../Context/MoviesContext';
+import { ShowsContext } from '../../Context/ShowsContext';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { formatDate, getYesterdayMidnight } from '../../Common/date'
 
-const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMoviesCBF }) => {
+const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewShowsCBF }) => {
   const { setMemberToEdit, setUpdateMembersList } = useContext(MembersContext);
-  const { movies, setUpdateMoviesList } = useContext(MoviesContext);
+  const { shows, setUpdateShowsList } = useContext(ShowsContext);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedMovie, setSelectedMovie] = useState('');
+  const [selectedShow, setSelectedShow] = useState('');
   let history = useHistory();
 
   const deleteMember = async () => {
@@ -38,19 +37,19 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
     history.push('/main/members/edit');
   };
 
-  const openSubscribeNewMovieDialog = () => {
-    if (movies?.length == 0) {
-      // "load" the movies to the context in case it wasn't done before
-      setUpdateMoviesList(true);
+  const openSubscribeNewShowDialog = () => {
+    if (shows?.length == 0) {
+      // "load" the shows to the context in case it wasn't done before
+      setUpdateShowsList(true);
     }
 
     setOpenDialog(true);
   };
 
-  const subscribeNewMovie = async() => {
-    /* find movie id from movie name*/
-    let show = movies.filter( (movie) => {
-      return movie.name.toLowerCase() === selectedMovie.toLowerCase() 
+  const subscribeNewShow = async() => {
+    /* find show id from show name*/
+    let show = shows.filter( (show) => {
+      return show.name.toLowerCase() === selectedShow.toLowerCase() 
     })[0];
 
     if(!show){
@@ -89,41 +88,41 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const handleClose = () => {
-    setSelectedMovie('');
+    setSelectedShow('');
     setSelectedDate(null);
     setOpenDialog(false);
   };
 
-  const getUnseenMovies = () => {
-    //no movies - nothing to return
-    if (movies?.length === 0) return [];
+  const getUnseenShows = () => {
+    //no shows - nothing to return
+    if (shows?.length === 0) return [];
 
-    let allMoviesName = movies.map((movie) => movie.name);
+    let allShowsName = shows.map((show) => show.name);
     if (!data.showsSubscriptions ||  data.showsSubscriptions.length == 0) {
-      /* Return all movies */
-      return allMoviesName;
+      /* Return all shows */
+      return allShowsName;
     }
 
-    /* Return only movies that the member didn't watch yet */
-    let seenMoviesName = data.showsSubscriptions.map((showSub) => showSub.name);
-    let unseenMovies = allMoviesName.filter((movieName) => {
-      return !seenMoviesName.includes(movieName);
+    /* Return only shows that the member didn't watch yet */
+    let seenShowsName = data.showsSubscriptions.map((showSub) => showSub.name);
+    let unseenShows = allShowsName.filter((showName) => {
+      return !seenShowsName.includes(showName);
     });
 
-    return unseenMovies;
+    return unseenShows;
   };
 
-  const buildMovieUrl = (movieName) => {
-    if(canViewMoviesCBF()){
-      return `/main/movies/${movieName}`;
+  const buildShowUrl = (showName) => {
+    if(canViewShowsCBF()){
+      return `/main/shows/${showName}`;
     }
     else{
-      // user is not allowed to view movies - make a broken link
+      // user is not allowed to view shows - make a broken link
       return "#";
     }
   };
 
-  const getFutureMovies = () => {
+  const getFutureShows = () => {
     if(!data.showsSubscriptions){
       return [];
     }
@@ -136,14 +135,14 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
     return futureSubscriptions.map((showSub) => {
       return (
         <li key={showSub._id}>
-          <Link to={buildMovieUrl(showSub.name)}>{showSub.name}</Link>,{' '}
+          <Link to={buildShowUrl(showSub.name)}>{showSub.name}</Link>,{' '}
           {formatDate(showSub.date)}
         </li>
       );
     });
   };
 
-  const getPastMovies = () => {
+  const getPastShows = () => {
     if(!data.showsSubscriptions){
       return [];
     }
@@ -156,7 +155,7 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
     return pastSubscriptions.map((showSub) => {
       return (
         <li key={showSub._id}>
-          <Link to={buildMovieUrl(showSub.name)}>{showSub.name}</Link>,{' '}
+          <Link to={buildShowUrl(showSub.name)}>{showSub.name}</Link>,{' '}
           {showSub.date}
         </li>
       );
@@ -188,29 +187,29 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
           border: '2px solid green',
         }}
       >
-        <h5>Movies Watched</h5>
-        <button onClick={openSubscribeNewMovieDialog}>
-          Subscribe to a new movie
+        <h5>Shows Watched</h5>
+        <button onClick={openSubscribeNewShowDialog}>
+          Subscribe to a new show
         </button>
         <br /> <br />
-        <h6>Seen movies:</h6>
-        <ul>{getPastMovies()}</ul>
-        <h6>Future movies:</h6>
-        <ul>{getFutureMovies()}</ul>
+        <h6>Seen shows:</h6>
+        <ul>{getPastShows()}</ul>
+        <h6>Future shows:</h6>
+        <ul>{getFutureShows()}</ul>
       </div>
       <Dialog
         open={openDialog}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle>Subscribe to a new movie</DialogTitle>
+        <DialogTitle>Subscribe to a new show</DialogTitle>
         <DialogContent>
           <Autocomplete
-            value={selectedMovie}
+            value={selectedShow}
             onChange={(event, newValue) => {
-              setSelectedMovie(newValue);
+              setSelectedShow(newValue);
             }}
-            options={getUnseenMovies()}
+            options={getUnseenShows()}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -236,7 +235,7 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
           </MuiPickersUtilsProvider>
         </DialogContent>
         <DialogActions>
-          <Button onClick={subscribeNewMovie} color="primary">
+          <Button onClick={subscribeNewShow} color="primary">
             Subscribe
           </Button>
           <Button onClick={handleClose} color="secondary">
@@ -248,12 +247,6 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
         onClick={editMember}
         variant="contained"
         color="primary"
-        style={{
-          backgroundColor: 'green',
-          color: 'white',
-          padding: 3,
-          margin: 1,
-        }}
         disabled={!canEditMemberCBF()}
       >
         Edit
@@ -261,13 +254,7 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
       <Button
         onClick={deleteMember}
         variant="contained"
-        color="primary"
-        style={{
-          backgroundColor: 'red',
-          color: 'white',
-          padding: 3,
-          margin: 1,
-        }}
+        color="secondary"
         disabled={!canDeleteMemberCBF()}
       >
         Delete

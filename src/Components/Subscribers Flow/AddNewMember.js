@@ -19,7 +19,7 @@ const AddNewMemberComp = (props) => {
     };
     await CinemaApi.invoke('addMember', memberData);
 
-    /* Navigate back to all movies display */
+    /* Navigate back to all members display */
     setTimeout(() => {
       setUpdateMembersList(true);
       backToMembersList();

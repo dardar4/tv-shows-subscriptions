@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { firestoreDB } from '../../firebaseConfig'
 import CinemaApi from '../../Api Utils/CinemaApi';
 import HeaderComp from '../General/Header';
 import { toast } from 'react-toastify';

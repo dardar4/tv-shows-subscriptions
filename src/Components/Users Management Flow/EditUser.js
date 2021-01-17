@@ -51,13 +51,13 @@ const EditUserComp = (props) => {
       }
     }
 
-    if (!values.permissions.includes('View Movies')) {
+    if (!values.permissions.includes('View Shows')) {
       if (
-        values.permissions.includes('Create Movies') ||
-        values.permissions.includes('Delete Movies') ||
-        values.permissions.includes('Update Movies')
+        values.permissions.includes('Create Shows') ||
+        values.permissions.includes('Delete Shows') ||
+        values.permissions.includes('Update Shows')
       ) {
-        values.permissions.push('View Movies');
+        values.permissions.push('View Shows');
       }
     }
 
@@ -210,28 +210,28 @@ const EditUserComp = (props) => {
                     Update Subscriptions
                   </MenuItem>
                   <MenuItem
-                    value="View Movies"
+                    value="View Shows"
                     classes={{ selected: classes.selected }}
                   >
-                    View Movies
+                    View Shows
                   </MenuItem>
                   <MenuItem
-                    value="Create Movies"
+                    value="Create Shows"
                     classes={{ selected: classes.selected }}
                   >
-                    Create Movies
+                    Create Shows
                   </MenuItem>
                   <MenuItem
-                    value="Delete Movies"
+                    value="Delete Shows"
                     classes={{ selected: classes.selected }}
                   >
-                    Delete Movies
+                    Delete Shows
                   </MenuItem>
                   <MenuItem
-                    value="Update Movies"
+                    value="Update Shows"
                     classes={{ selected: classes.selected }}
                   >
-                    Update Movies
+                    Update Shows
                   </MenuItem>
                 </Field>
               </FormControl>

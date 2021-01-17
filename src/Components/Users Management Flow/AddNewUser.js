@@ -47,13 +47,13 @@ const AddNewUserComp = (props) => {
       }
     }
 
-    if (!values.permissions.includes('View Movies')) {
+    if (!values.permissions.includes('View Shows')) {
       if (
-        values.permissions.includes('Create Movies') ||
-        values.permissions.includes('Delete Movies') ||
-        values.permissions.includes('Update Movies')
+        values.permissions.includes('Create Shows') ||
+        values.permissions.includes('Delete Shows') ||
+        values.permissions.includes('Update Shows')
       ) {
-        values.permissions.push('View Movies');
+        values.permissions.push('View Shows');
       }
     }
 
@@ -180,40 +180,40 @@ const AddNewUserComp = (props) => {
                     Create Subscriptions
                   </MenuItem>
                   <MenuItem
-                    value="Delete Subscriptions"
-                    classes={{ selected: classes.selected }}
-                  >
-                    Delete Subscriptions
-                  </MenuItem>
-                  <MenuItem
                     value="Update Subscriptions"
                     classes={{ selected: classes.selected }}
                   >
                     Update Subscriptions
                   </MenuItem>
                   <MenuItem
-                    value="View Movies"
+                    value="Delete Subscriptions"
                     classes={{ selected: classes.selected }}
                   >
-                    View Movies
+                    Delete Subscriptions
                   </MenuItem>
                   <MenuItem
-                    value="Create Movies"
+                    value="View Shows"
                     classes={{ selected: classes.selected }}
                   >
-                    Create Movies
+                    View Shows
                   </MenuItem>
                   <MenuItem
-                    value="Delete Movies"
+                    value="Create Shows"
                     classes={{ selected: classes.selected }}
                   >
-                    Delete Movies
+                    Create Shows
                   </MenuItem>
                   <MenuItem
-                    value="Update Movies"
+                    value="Update Shows"
                     classes={{ selected: classes.selected }}
                   >
-                    Update Movies
+                    Update Shows
+                  </MenuItem>
+                  <MenuItem
+                    value="Delete Shows"
+                    classes={{ selected: classes.selected }}
+                  >
+                    Delete Shows
                   </MenuItem>
                 </Field>
               </FormControl>

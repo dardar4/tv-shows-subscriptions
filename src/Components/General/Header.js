@@ -140,7 +140,7 @@ const HeaderComp = () => {
             container
           >
             <TheatersSharpIcon />
-            <Typography>Movies - Subscriptions Web Site</Typography>
+            <Typography>TV Shows - Subscriptions Web Site</Typography>
             <TheatersSharpIcon />
           </Grid>
 

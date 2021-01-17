@@ -35,8 +35,8 @@ const MembersComp = (props) => {
     return UserPermissionUtil.validatePermission(loggedInUser, 'Create Subscriptions');
   }
 
-  const canViewMovies = () => {
-    return UserPermissionUtil.validatePermission(loggedInUser, 'View Movies');
+  const canViewShows = () => {
+    return UserPermissionUtil.validatePermission(loggedInUser, 'View Shows');
   }
 
   return (
@@ -65,7 +65,7 @@ const MembersComp = (props) => {
           data={memberData}                 
           canEditMemberCBF={canEditMember}
           canDeleteMemberCBF={canDeleteMember}
-          canViewMoviesCBF={canViewMovies}
+          canViewShowsCBF={canViewShows}
           />;
       })}
     </Grid>

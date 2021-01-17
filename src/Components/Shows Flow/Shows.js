@@ -6,9 +6,9 @@ import {
   TextField,
 } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
-import { MoviesContext } from '../../Context/MoviesContext';
+import { ShowsContext } from '../../Context/ShowsContext';
 import SectionTitleComp from '../General/SectionTitle';
-import MovieCardComp from './MovieCard';
+import ShowCardComp from './ShowCard';
 import UserPermissionUtil from '../General/UserPermissionsUtil';
 import { LoggedInUserContext } from '../../Context/LoggedInUserContext';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,75 +23,75 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MoviesComp = () => {
+const ShowsComp = () => {
   let classes = useStyles();
-  const { movies, setUpdateMoviesList } = useContext(MoviesContext);
+  const { shows, setUpdateShowsList } = useContext(ShowsContext);
   const { members } = useContext(MembersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const [ searchText, setSearchText ] = useState('');
-  const [ movieSubsMap, setMovieSubsMap ] = useState(new Map()); 
-  let { movieName } = useParams();
+  const [ showSubsMap, setShowSubsMap ] = useState(new Map()); 
+  let { showName } = useParams();
 
   useEffect(() => {
-    const initMoviesComponent = async () => {
-      await setUpdateMoviesList(true);
-      initMoviesSubsMap();
+    const initShowsComponent = async () => {
+      await setUpdateShowsList(true);
+      initShowsSubsMap();
   
-      if(movieName){
-        setSearchText(movieName);
+      if(showName){
+        setSearchText(showName);
       }
     }
 
-    initMoviesComponent();
+    initShowsComponent();
   }, []);
 
-  const initMoviesSubsMap = async() => {
+  const initShowsSubsMap = async() => {
     let map = new Map();
     let subsArr = await CinemaApi.invoke('getSubscriptions');
 
     if(!subsArr || subsArr.length === 0){
-      setMovieSubsMap(map);
+      setShowSubsMap(map);
       return;
     }
 
-    movies.forEach(movie => {
-      let movieSubsArr = [];
+    shows.forEach(show => {
+      let showSubsArr = [];
       subsArr.forEach(subscriberItem => {
-          var subMovieItem = subscriberItem.shows?.find(subShow => subShow.showID ===  movie.showID);
-          if (subMovieItem)
+          var subShowItem = subscriberItem.shows?.find(subShow => subShow.showID ===  show.showID);
+          if (subShowItem)
           {
-            movieSubsArr.push({
+            showSubsArr.push({
               subscriberId : subscriberItem.memberID,
               subscriberName : members.filter(member => member._id === subscriberItem.memberID)[0].name,
-              subscriptionDate : subMovieItem.date
+              subscriptionDate : subShowItem.date
             })
           }
       })
-      map[movie.showID] = movieSubsArr;
+      map[show.showID] = showSubsArr;
     });
-    await setMovieSubsMap(map);
+    await setShowSubsMap(map);
   }
 
-  const canEditMovie = () => {
-    return UserPermissionUtil.validatePermission(loggedInUser, 'Update Movies');
+  const canEditShow = () => {
+    return UserPermissionUtil.validatePermission(loggedInUser, 'Update Shows');
   };
 
-  const canDeleteMovie = () => {
-    return UserPermissionUtil.validatePermission(loggedInUser, 'Delete Movies');
+  const canDeleteShow = () => {
+    return UserPermissionUtil.validatePermission(loggedInUser, 'Delete Shows');
   };
 
-  const canAddMovie = () => {
-    return UserPermissionUtil.validatePermission(loggedInUser, 'Create Movies');
+  const canAddShow = () => {
+    return UserPermissionUtil.validatePermission(loggedInUser, 'Create Shows');
   };
 
-  const getMovies = () => {
+  const getShows = () => {
     if (searchText.length === 0) {
-      return movies;
+      return shows;
     } else {
-      return movies.filter((movie) => {
-        let movieNameLC = movie.name.toLowerCase();
+      return shows.filter((show) => {
+        let showNameLC = show.name.toLowerCase();
         let searchTextLC = searchText.toLowerCase();
-        return movieNameLC.includes(searchTextLC);
+        return showNameLC.includes(searchTextLC);
       });
     }
   };
@@ -99,22 +99,22 @@ const MoviesComp = () => {
   return (
     <Grid container direction="column" alignItems="center">
       <Grid item>
-        <SectionTitleComp titleText={'Movies'} />{' '}
+        <SectionTitleComp titleText={'Shows'} />{' '}
       </Grid>
 
       <Grid item>
         <div>
           <Link
-            to="/main/movies/add"
-            className={canAddMovie() ? '' : classes.disabledButton}
+            to="/main/shows/add"
+            className={canAddShow() ? '' : classes.disabledButton}
           >
             <Button
               variant="contained"
               color="primary"
               style={{ padding: 3, margin: 1 }}
-              disabled={!canAddMovie()}
+              disabled={!canAddShow()}
             >
-              Add Movie
+              Add Show
             </Button>
           </Link>
         </div>
@@ -126,7 +126,7 @@ const MoviesComp = () => {
         <SearchBar
           value={searchText}
           onChange={(newValue) => setSearchText(newValue)}
-          onRequestSearch={searchMovies}
+          onRequestSearch={searchShows}
         />
       </Grid> */}
 
@@ -153,14 +153,14 @@ const MoviesComp = () => {
 
       <Grid item>
         <Grid container spacing={5}>
-          {getMovies().map((movieData) => {
+          {getShows().map((showData) => {
             return (
-              <Grid item xs={12} sm={6} md={4} key={movieData.showID}>
-                  <MovieCardComp
-                    data={movieData}
-                    subscribers={movieSubsMap[movieData.showID]}
-                    canEditMovieCBF={canEditMovie}
-                    canDeleteMovieCBF={canDeleteMovie}
+              <Grid item xs={12} sm={6} md={4} key={showData.showID}>
+                  <ShowCardComp
+                    data={showData}
+                    subscribers={showSubsMap[showData.showID]}
+                    canEditShowCBF={canEditShow}
+                    canDeleteShowCBF={canDeleteShow}
                   />
               </Grid>
             );
@@ -171,4 +171,4 @@ const MoviesComp = () => {
   );
 };
 
-export default MoviesComp;
+export default ShowsComp;

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import CinemaApi from '../../Api Utils/CinemaApi';
-import { MoviesContext } from '../../Context/MoviesContext';
+import { ShowsContext } from '../../Context/ShowsContext';
 import {
   Button,
   Card,
@@ -32,21 +32,21 @@ const useStyles = makeStyles({
   },
 });
 
-const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }) => {
+const ShowCardComp = ({ data, subscribers, canDeleteShowCBF, canEditShowCBF }) => {
   const classes = useStyles();
   let history = useHistory();
-  const { setUpdateMoviesList, setMovieToEdit } = useContext(MoviesContext);
+  const { setUpdateShowsList, setShowToEdit } = useContext(ShowsContext);
 
-  const deleteMovie = async () => {
+  const deleteShow = async () => {
     await CinemaApi.invoke('deleteShow', data.showID);
     setTimeout(() => {
-      setUpdateMoviesList(true);
+      setUpdateShowsList(true);
     }, 200);
   };
 
-  const editMovie = () => {
-    setMovieToEdit(data);
-    history.push('/main/movies/edit');
+  const editShow = () => {
+    setShowToEdit(data);
+    history.push('/main/shows/edit');
   };
 
   return (
@@ -55,7 +55,7 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
         <CardMedia
           className={classes.media}
           image={data.imageURL}
-          title="Movie Image"
+          title="Show Image"
         />
       </CardActionArea>
       <CardContent>
@@ -89,16 +89,16 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
         <Button
           size="small"
           color="primary"
-          onClick={editMovie}
-          disabled={!canEditMovieCBF()}
+          onClick={editShow}
+          disabled={!canEditShowCBF()}
         >
           Edit
         </Button>
         <Button
           size="small"
-          onClick={deleteMovie}
+          onClick={deleteShow}
           color="secondary"
-          disabled={!canDeleteMovieCBF()}
+          disabled={!canDeleteShowCBF()}
         >
           Delete
         </Button>
@@ -107,4 +107,4 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
   );
 };
 
-export default MovieCardComp;
+export default ShowCardComp;

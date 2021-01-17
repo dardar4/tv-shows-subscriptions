@@ -8,7 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import LoggedInUserContextProvider from './Context/LoggedInUserContext';
 import UsersContextProvider from './Context/UsersContext';
 import TabsContextProvider from './Context/TabsContext';
-import MoviesContextProvider from './Context/MoviesContext';
+import ShowsContextProvider from './Context/ShowsContext';
 import MembersContextProvider from './Context/MembersContext';
 import IdleTimerContainer from './IdleTimerUtil/idleTimerContainer';
 import ToastWrapperComp from './Components/General/ToastWrapper';
@@ -20,7 +20,7 @@ function App() {
       <TabsContextProvider>
         <LoggedInUserContextProvider>
           <UsersContextProvider>
-            <MoviesContextProvider>
+            <ShowsContextProvider>
               <MembersContextProvider>
                 <CssBaseline />
                 <ToastContextProvider>
@@ -38,7 +38,7 @@ function App() {
                   </div>
                 </ToastContextProvider>
               </MembersContextProvider>
-            </MoviesContextProvider>
+            </ShowsContextProvider>
           </UsersContextProvider>
         </LoggedInUserContextProvider>
       </TabsContextProvider>
