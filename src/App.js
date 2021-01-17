@@ -1,13 +1,9 @@
 import './App.css';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import CreateAccountComp from './Components/Login Flow/CreateAccount';
 import LoginPageComp from './Components/Login Flow/LoginPage';
 import MainPageComp from './Components/General/MainPage';
-import UsersApi from './Api Utils/UsersApi';
-import MoviesApi from './Api Utils/MoviesApi';
-import FirebaseApi from './Api Utils/FireBaseApi';
-import { firebase } from './firebaseConfig';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LoggedInUserContextProvider from './Context/LoggedInUserContext';
 import UsersContextProvider from './Context/UsersContext';

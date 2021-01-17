@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from 'react';
-import FirebaseApi from '../Api Utils/FireBaseApi';
 import CinemaApi from '../Api Utils/CinemaApi';
 
 export const MoviesContext = createContext();

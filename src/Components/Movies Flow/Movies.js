@@ -35,7 +35,6 @@ const MoviesComp = () => {
   useEffect(() => {
     const initMoviesComponent = async () => {
       await setUpdateMoviesList(true);
-      console.log('movies', movies);
       initMoviesSubsMap();
   
       if(movieName){

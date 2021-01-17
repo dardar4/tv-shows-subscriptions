@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { MoviesContext } from '../../Context/MoviesContext';
-import FirebaseApi from '../../Api Utils/FireBaseApi';
 import CinemaApi from '../../Api Utils/CinemaApi';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';

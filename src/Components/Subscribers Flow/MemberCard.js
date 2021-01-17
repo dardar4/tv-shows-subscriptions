@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { MembersContext } from '../../Context/MembersContext';
-import FirebaseApi from '../../Api Utils/FireBaseApi';
 import CinemaApi from '../../Api Utils/CinemaApi';
 import {
   Button,
