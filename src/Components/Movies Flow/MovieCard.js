@@ -13,8 +13,7 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
-import parse from 'date-fns/parse'
-import format from 'date-fns/format'
+import { formatDate } from '../../Common/date'
 
 const useStyles = makeStyles({
   root: {
@@ -50,15 +49,6 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
     history.push('/main/movies/edit');
   };
 
-  const formatDate = (date) => {
-    var result = parse(
-      date,
-      `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'`,
-      new Date()
-    );
-    return format(result, 'dd.MM.yyyy');
-  }
-
   return (
     <Card className={classes.root}>
       <CardActionArea>
@@ -90,7 +80,7 @@ const MovieCardComp = ({ data, subscribers, canDeleteMovieCBF, canEditMovieCBF }
         Subscribers:
         <ul>
           {subscribers && subscribers.length > 0 && subscribers.map((s, index) => {
-            return <li key={index}>{s.subscriberName} , {s.subscriptionDate.toDate().toLocaleDateString()}</li>;
+            return <li key={index}>{s.subscriberName} , {formatDate(s.subscriptionDate)}</li>;
           })}
         </ul>
 

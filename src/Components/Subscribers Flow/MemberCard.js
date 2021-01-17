@@ -19,6 +19,7 @@ import {
 } from '@material-ui/pickers';
 import { MoviesContext } from '../../Context/MoviesContext';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { formatDate, getYesterdayMidnight } from '../../Common/date'
 
 const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMoviesCBF }) => {
   const { setMemberToEdit, setUpdateMembersList } = useContext(MembersContext);
@@ -48,19 +49,24 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const subscribeNewMovie = async() => {
-    console.log('subscribeNewMovie', data);
     /* find movie id from movie name*/
     let show = movies.filter( (movie) => {
       return movie.name.toLowerCase() === selectedMovie.toLowerCase() 
     })[0];
 
+    if(!show){
+      console.error('no show was selected');
+      handleClose();
+      return;
+    }
 
+    let selectedDateVal = selectedDate ?? new Date();
 
     // Add the selected show to the existing member shows array
     let newShowsArr = [...data.showsSubscriptions, {
       name : show.name,
       showID : show.showID,
-      date : selectedDate ?? new Date()
+      date : selectedDateVal.toISOString()
     }]
 
     const subscribeShowData = {
@@ -90,17 +96,14 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
   };
 
   const getUnseenMovies = () => {
-    
     //no movies - nothing to return
     if (movies?.length === 0) return [];
-
 
     let allMoviesName = movies.map((movie) => movie.name);
     if (!data.showsSubscriptions ||  data.showsSubscriptions.length == 0) {
       /* Return all movies */
       return allMoviesName;
     }
-
 
     /* Return only movies that the member didn't watch yet */
     let seenMoviesName = data.showsSubscriptions.map((showSub) => showSub.name);
@@ -126,15 +129,16 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
       return [];
     }
     
+    var yesterday = getYesterdayMidnight();
     let futureSubscriptions = data.showsSubscriptions?.filter((showSub) => {
-      return new Date(showSub.date) >= new Date();
+      return new Date(showSub.date) >= yesterday;
     });
 
     return futureSubscriptions.map((showSub) => {
       return (
         <li key={showSub._id}>
           <Link to={buildMovieUrl(showSub.name)}>{showSub.name}</Link>,{' '}
-          {showSub.date}
+          {formatDate(showSub.date)}
         </li>
       );
     });
@@ -145,8 +149,9 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
       return [];
     }
 
-    let pastSubscriptions = data.showsSubscriptions?.filter((showSub) => {
-      return new Date(showSub.date) < new Date();
+    var yesterday = getYesterdayMidnight();
+    let pastSubscriptions = data.showsSubscriptions.filter((showSub) => {
+      return new Date(showSub.date) < yesterday;
     });
 
     return pastSubscriptions.map((showSub) => {
@@ -207,14 +212,24 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewMov
               setSelectedMovie(newValue);
             }}
             options={getUnseenMovies()}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={"Shows"}
+                inputProps={{
+                  ...params.inputProps,
+                  required: true
+                }}
+                required={true}
+              />
+            )}
           />
           <br />
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               onChange={(value) => setSelectedDate(value)}
               format="MM/dd/yyyy"
-              helperText="some helper text"
+              helperText="select a date to watch to show"
               variant="outlined"
               inputVariant="outlined"
               disablePast

@@ -115,6 +115,11 @@ const invoke = async (action, ...params) => {
             response = await axios.patch(`${Cinema_URL}/subscriptions/${memberID}`, subscribeShowData);
             break;
         }
+        case 'getSubscriptions':
+        {
+            response = await axios.get(`${Cinema_URL}/subscriptions`);
+            break;
+        }
         default:
             console.warn(`Cinema Api action=${action} is not supported`)
             return null;

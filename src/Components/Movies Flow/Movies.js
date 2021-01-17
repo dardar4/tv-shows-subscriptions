@@ -14,8 +14,8 @@ import { LoggedInUserContext } from '../../Context/LoggedInUserContext';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
-import FirebaseApi from '../../Api Utils/FireBaseApi';
 import { MembersContext } from '../../Context/MembersContext';
+import CinemaApi from '../../Api Utils/CinemaApi';
 
 const useStyles = makeStyles((theme) => ({
   disabledButton: {
@@ -33,18 +33,22 @@ const MoviesComp = () => {
   let { movieName } = useParams();
 
   useEffect(() => {
-    setUpdateMoviesList(true);
-    initMoviesSubsMap();
-
-    if(movieName){
-      setSearchText(movieName)
+    const initMoviesComponent = async () => {
+      await setUpdateMoviesList(true);
+      console.log('movies', movies);
+      initMoviesSubsMap();
+  
+      if(movieName){
+        setSearchText(movieName);
+      }
     }
-    
+
+    initMoviesComponent();
   }, []);
 
   const initMoviesSubsMap = async() => {
     let map = new Map();
-    let subsArr = await FirebaseApi.getAllSubscriptions();
+    let subsArr = await CinemaApi.invoke('getSubscriptions');
 
     if(!subsArr || subsArr.length === 0){
       setMovieSubsMap(map);
@@ -54,20 +58,19 @@ const MoviesComp = () => {
     movies.forEach(movie => {
       let movieSubsArr = [];
       subsArr.forEach(subscriberItem => {
-          //let arr = subscriberItem.movies.filter(subMovie => subMovie.id ===  movie.id);
-          var subMovieItem = subscriberItem.movies?.find(subMovie => subMovie.id ===  movie.id);
+          var subMovieItem = subscriberItem.shows?.find(subShow => subShow.showID ===  movie.showID);
           if (subMovieItem)
           {
             movieSubsArr.push({
-              subscriberId : subscriberItem.memberId,
-              subscriberName : members.filter(member => member.id === subscriberItem.memberId)[0].name,
+              subscriberId : subscriberItem.memberID,
+              subscriberName : members.filter(member => member._id === subscriberItem.memberID)[0].name,
               subscriptionDate : subMovieItem.date
             })
           }
       })
       map[movie.showID] = movieSubsArr;
-      setMovieSubsMap(map);
     });
+    await setMovieSubsMap(map);
   }
 
   const canEditMovie = () => {
@@ -156,7 +159,7 @@ const MoviesComp = () => {
               <Grid item xs={12} sm={6} md={4} key={movieData.showID}>
                   <MovieCardComp
                     data={movieData}
-                    subscribers={movieSubsMap[movieData.id]}
+                    subscribers={movieSubsMap[movieData.showID]}
                     canEditMovieCBF={canEditMovie}
                     canDeleteMovieCBF={canDeleteMovie}
                   />
