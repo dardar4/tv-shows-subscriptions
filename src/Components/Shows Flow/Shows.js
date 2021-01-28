@@ -16,6 +16,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import { MembersContext } from '../../Context/MembersContext';
 import CinemaApi from '../../Api Utils/CinemaApi';
+import SpinnerComp from '../General/Spinner'
 
 const useStyles = makeStyles((theme) => ({
   disabledButton: {
@@ -29,23 +30,30 @@ const ShowsComp = () => {
   const { members } = useContext(MembersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const [ searchText, setSearchText ] = useState('');
-  const [ showSubsMap, setShowSubsMap ] = useState(new Map()); 
+  const [ showSubsMap, setShowSubsMap ] = useState(undefined);
   let { showName } = useParams();
 
   useEffect(() => {
+    setUpdateShowsList(true);
+
+    if(showName){
+      setSearchText(showName);
+    }
+  }, []);
+
+  useEffect(() => {
     const initShowsComponent = async () => {
-      await setUpdateShowsList(true);
       initShowsSubsMap();
-  
-      if(showName){
-        setSearchText(showName);
-      }
     }
 
     initShowsComponent();
-  }, []);
+  }, [JSON.stringify(shows)]);
 
-  const initShowsSubsMap = async() => {
+  const initShowsSubsMap = async () => {
+    if(!shows || shows.length === 0){
+      return;
+    }
+
     let map = new Map();
     let subsArr = await CinemaApi.invoke('getSubscriptions');
 
@@ -96,78 +104,87 @@ const ShowsComp = () => {
     }
   };
 
+  const showsLoaded = () => {
+    return shows.length > 0 && showSubsMap !== undefined;
+  }
+
   return (
-    <Grid container direction="column" alignItems="center">
-      <Grid item>
-        <SectionTitleComp titleText={'Shows'} />{' '}
-      </Grid>
+    <div>
+      { !showsLoaded() ?
+        <SpinnerComp></SpinnerComp>
+        :
+        <Grid container direction="column" alignItems="center">
+          <Grid item>
+            <SectionTitleComp titleText={'Shows'} />{' '}
+          </Grid>
 
-      <Grid item>
-        <div>
-          <Link
-            to="/main/shows/add"
-            className={canAddShow() ? '' : classes.disabledButton}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ padding: 3, margin: 1 }}
-              disabled={!canAddShow()}
-            >
-              Add Show
-            </Button>
-          </Link>
-        </div>
-      </Grid>
+          <Grid item>
+            <div>
+              <Link
+                to="/main/shows/add"
+                className={canAddShow() ? '' : classes.disabledButton}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ padding: 3, margin: 1 }}
+                  disabled={!canAddShow()}
+                >
+                  Add Show
+                </Button>
+              </Link>
+            </div>
+          </Grid>
 
-      {/* <br />
+          {/* <br />
 
-      <Grid item>
-        <SearchBar
-          value={searchText}
-          onChange={(newValue) => setSearchText(newValue)}
-          onRequestSearch={searchShows}
-        />
-      </Grid> */}
+          <Grid item>
+            <SearchBar
+              value={searchText}
+              onChange={(newValue) => setSearchText(newValue)}
+              onRequestSearch={searchShows}
+            />
+          </Grid> */}
 
-      <br/>
+          <br/>
 
-      <Grid item>
-        <TextField
-          value={searchText}
-          label="Search"
-          onChange={(e) => setSearchText(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
+          <Grid item>
+            <TextField
+              value={searchText}
+              label="Search"
+              onChange={(e) => setSearchText(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment>
+                    <IconButton>
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
 
-      <br />
+          <br />
 
-      <Grid item>
-        <Grid container spacing={5}>
-          {getShows().map((showData) => {
-            return (
-              <Grid item xs={12} sm={6} md={4} key={showData.showID}>
-                  <ShowCardComp
-                    data={showData}
-                    subscribers={showSubsMap[showData.showID]}
-                    canEditShowCBF={canEditShow}
-                    canDeleteShowCBF={canDeleteShow}
-                  />
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Grid>
-    </Grid>
+          <Grid item>
+            <Grid container spacing={5}>
+              {getShows().map((showData) => {
+                return (
+                  <Grid item xs={12} sm={6} md={4} key={showData.showID}>
+                      <ShowCardComp
+                        data={showData}
+                        subscribers={showSubsMap[showData.showID]}
+                        canEditShowCBF={canEditShow}
+                        canDeleteShowCBF={canDeleteShow}
+                      />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Grid>
+        </Grid> }
+    </div>
   );
 };
 
