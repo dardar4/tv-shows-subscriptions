@@ -14,8 +14,6 @@ import { LoggedInUserContext } from '../../Context/LoggedInUserContext';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
-import { MembersContext } from '../../Context/MembersContext';
-import CinemaApi from '../../Api Utils/CinemaApi';
 import SpinnerComp from '../General/Spinner'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,58 +25,17 @@ const useStyles = makeStyles((theme) => ({
 const ShowsComp = () => {
   let classes = useStyles();
   const { shows, setUpdateShowsList } = useContext(ShowsContext);
-  const { members } = useContext(MembersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const [ searchText, setSearchText ] = useState('');
-  const [ showSubsMap, setShowSubsMap ] = useState(undefined);
   let { showName } = useParams();
 
   useEffect(() => {
     setUpdateShowsList(true);
 
-    if(showName){
+    if(showName){ 
       setSearchText(showName);
     }
-  }, []);
-
-  useEffect(() => {
-    const initShowsComponent = async () => {
-      initShowsSubsMap();
-    }
-
-    initShowsComponent();
-  }, [JSON.stringify(shows)]);
-
-  const initShowsSubsMap = async () => {
-    if(!shows || shows.length === 0){
-      return;
-    }
-
-    let map = new Map();
-    let subsArr = await CinemaApi.invoke('getSubscriptions');
-
-    if(!subsArr || subsArr.length === 0){
-      setShowSubsMap(map);
-      return;
-    }
-
-    shows.forEach(show => {
-      let showSubsArr = [];
-      subsArr.forEach(subscriberItem => {
-          var subShowItem = subscriberItem.shows?.find(subShow => subShow.showID ===  show.showID);
-          if (subShowItem)
-          {
-            showSubsArr.push({
-              subscriberId : subscriberItem.memberID,
-              subscriberName : members.filter(member => member._id === subscriberItem.memberID)[0].name,
-              subscriptionDate : subShowItem.date
-            })
-          }
-      })
-      map[show.showID] = showSubsArr;
-    });
-    await setShowSubsMap(map);
-  }
+  }, [showName, setUpdateShowsList]);
 
   const canEditShow = () => {
     return UserPermissionUtil.validatePermission(loggedInUser, 'Update Shows');
@@ -104,13 +61,9 @@ const ShowsComp = () => {
     }
   };
 
-  const showsLoaded = () => {
-    return shows.length > 0 && showSubsMap !== undefined;
-  }
-
   return (
     <div>
-      { !showsLoaded() ?
+      { shows.length === 0 ?
         <SpinnerComp></SpinnerComp>
         :
         <Grid container direction="column" alignItems="center">
@@ -174,7 +127,8 @@ const ShowsComp = () => {
                   <Grid item xs={12} sm={6} md={4} key={showData.showID}>
                       <ShowCardComp
                         data={showData}
-                        subscribers={showSubsMap[showData.showID]}
+                        //subscribers={showSubsMap[showData.showID]}
+                        subscribers={showData.showSubscriptions}
                         canEditShowCBF={canEditShow}
                         canDeleteShowCBF={canDeleteShow}
                       />

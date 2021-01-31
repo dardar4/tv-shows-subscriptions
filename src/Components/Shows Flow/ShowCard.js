@@ -79,8 +79,8 @@ const ShowCardComp = ({ data, subscribers, canDeleteShowCBF, canEditShowCBF }) =
         <br/>
         Subscribers:
         <ul>
-          {subscribers && subscribers.length > 0 && subscribers.map((s, index) => {
-            return <li key={index}>{s.subscriberName} , {formatDate(s.subscriptionDate)}</li>;
+          {subscribers && subscribers.map((s, index) => {
+            return <li key={index}>{s.memberName} , {formatDate(s.subscriptionDate)}</li>;
           })}
         </ul>
 

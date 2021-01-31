@@ -13,6 +13,7 @@ const ShowsContextProvider = (props) => {
     const getAllShowsData = async () => {
       const showsDataArr = await CinemaApi.invoke('getShows');
 
+      console.log(showsDataArr);
       setShows(showsDataArr ?? []);
       setUpdateShowsList(false);
     };
