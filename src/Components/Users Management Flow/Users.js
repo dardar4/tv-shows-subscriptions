@@ -10,7 +10,7 @@ const UsersComp = (props) => {
 
   useEffect(() => {
     setUpdateUsersList(true);
-  }, []);
+  }, [setUpdateUsersList]);
 
   return (
     <Grid container direction="column" alignItems="center">
@@ -31,6 +31,9 @@ const UsersComp = (props) => {
       {users.map((userData) => {
         if (!userData.isAdmin) {
           return <UserCardComp key={userData.id} data={userData} />;
+        }
+        else{
+          return null;
         }
       })}
     </Grid>

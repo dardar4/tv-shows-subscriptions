@@ -21,7 +21,7 @@ const MembersComp = (props) => {
 
   useEffect(() => {
     setUpdateMembersList(true);
-  }, []);
+  }, [setUpdateMembersList]);
 
   const canEditMember = () => {
     return UserPermissionUtil.validatePermission(loggedInUser, 'Update Subscriptions');
@@ -62,7 +62,8 @@ const MembersComp = (props) => {
       {members.map((memberData) => {
           return <MemberCardComp 
           key={memberData._id} 
-          data={memberData}                 
+          data={memberData}
+          isAdminView={loggedInUser.isAdmin}           
           canEditMemberCBF={canEditMember}
           canDeleteMemberCBF={canDeleteMember}
           canViewShowsCBF={canViewShows}

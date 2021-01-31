@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useRef, useContext } from 'react';
 import IdleTimer from 'react-idle-timer';
 import { useHistory } from 'react-router-dom';
 import { LoggedInUserContext } from '../Context/LoggedInUserContext';

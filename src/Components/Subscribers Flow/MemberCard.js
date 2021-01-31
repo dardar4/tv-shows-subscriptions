@@ -19,7 +19,7 @@ import { ShowsContext } from '../../Context/ShowsContext';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { formatDate, getYesterdayMidnight } from '../../Common/date'
 
-const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewShowsCBF }) => {
+const MemberCardComp = ({ data, isAdminView, canDeleteMemberCBF, canEditMemberCBF, canViewShowsCBF }) => {
   const { setMemberToEdit, setUpdateMembersList } = useContext(MembersContext);
   const { shows, setUpdateShowsList } = useContext(ShowsContext);
   const [openDialog, setOpenDialog] = useState(false);
@@ -38,7 +38,7 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewSho
   };
 
   const openSubscribeNewShowDialog = () => {
-    if (shows?.length == 0) {
+    if (shows?.length === 0) {
       // "load" the shows to the context in case it wasn't done before
       setUpdateShowsList(true);
     }
@@ -98,7 +98,7 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewSho
     if (shows?.length === 0) return [];
 
     let allShowsName = shows.map((show) => show.name);
-    if (!data.showsSubscriptions ||  data.showsSubscriptions.length == 0) {
+    if (!data.showsSubscriptions ||  data.showsSubscriptions.length === 0) {
       /* Return all shows */
       return allShowsName;
     }
@@ -171,8 +171,9 @@ const MemberCardComp = ({ data, canDeleteMemberCBF, canEditMemberCBF, canViewSho
         borderLeftColor: 'red',
       }}
     >
-      <label>ID: </label>
-      {data._id} <br />
+      {isAdminView ? <div>
+        <label>ID: </label>
+        {data._id} <br /> </div> : null }
       <label>Name: </label>
       {data.name} <br />
       <label>Email: </label>

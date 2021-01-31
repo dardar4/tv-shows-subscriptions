@@ -58,7 +58,7 @@ const NavigationBarWithTabsComp = () => {
       history.push(`/main/members`);
       setSelectedTab(1);
     }
-  }, [])
+  }, [loggedInUser])
 
   return (
     <>

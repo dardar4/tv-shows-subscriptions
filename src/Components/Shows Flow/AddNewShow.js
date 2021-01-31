@@ -11,7 +11,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { KeyboardDatePicker } from 'formik-material-ui-pickers';
 
 const parseGenres = (genresStr) => {
-  return genresStr.split(',').filter((g) => g != '');
+  return genresStr.split(',').filter((g) => g !== '');
 };
 
 const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/;
