@@ -10,13 +10,12 @@ const UserCardComp = ({ data }) => {
   let history = useHistory();
 
   const deleteUser = async () => {
-    await CinemaApi.invoke('deleteUser', data.id);
+    await CinemaApi.invoke('deleteUser', data._id);
 
     setUpdateUsersList(true);
   };
 
   const editUser = () => {
-    console.log('user to edit:', data);
     setUserToEdit(data);
     history.push('/main/users/edit');
   };
@@ -30,7 +29,7 @@ const UserCardComp = ({ data }) => {
         borderLeftColor: 'red',
       }}
     >
-      ID : {data.id} <br />
+      ID : {data._id} <br />
       Name: {data.firstName + ' ' + data.lastName} <br />
       User Name: {data.userName} <br />
       Session Time Out (in minutes): {data.sessionTimeOut} <br />

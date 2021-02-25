@@ -7,7 +7,6 @@ const ShowsContextProvider = (props) => {
   const [shows, setShows] = useState([]);
   const [updateShowsList, setUpdateShowsList] = useState(false);
   const [showToEdit, setShowToEdit] = useState({})
-  const [displayMode, setDisplayMode] = useState('shows');
 
   useEffect(() => {
     const getAllShowsData = async () => {
@@ -24,13 +23,7 @@ const ShowsContextProvider = (props) => {
 
   return (
     <ShowsContext.Provider 
-        value={{
-          shows, 
-          setUpdateShowsList, 
-          showToEdit, 
-          setShowToEdit, 
-          displayMode, 
-          setDisplayMode}}>
+        value={{ shows,  setUpdateShowsList,  showToEdit, setShowToEdit }}>
       {props.children}
     </ShowsContext.Provider>
   );

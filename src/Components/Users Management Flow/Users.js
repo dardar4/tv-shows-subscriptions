@@ -30,7 +30,7 @@ const UsersComp = (props) => {
 
       {users.map((userData) => {
         if (!userData.isAdmin) {
-          return <UserCardComp key={userData.id} data={userData} />;
+          return <UserCardComp key={userData._id} data={userData} />;
         }
         else{
           return null;

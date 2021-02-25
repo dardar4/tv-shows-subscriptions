@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const CINEMA_API_URL = 'http://localhost:9000/api'
+const CINEMA_API_URL = process.env.REACT_APP_CINEMA_API_URL;
 
 const handleResponse = (response) => {
     //console.log('CinemaApi::handleResponse', response); //TODO: delete of better logger ?
@@ -46,7 +46,7 @@ const invoke = async (action, ...params) => {
         case 'updateUser':
         {
             const userData = params[0];
-            response = await axios.patch(`${CINEMA_API_URL}/users/${userData.id}`, userData);
+            response = await axios.patch(`${CINEMA_API_URL}/users/${userData._id}`, userData);
             break;
         }
         case 'deleteUser':

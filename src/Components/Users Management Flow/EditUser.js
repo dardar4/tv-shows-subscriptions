@@ -70,12 +70,11 @@ const EditUserComp = (props) => {
 
     if (needToUpdateUser) {
       let updatedUserData = {
-        id: userToEdit.id,
+        _id: userToEdit._id,
         firstName: values.firstName,
         lastName: values.lastName,
         sessionTimeOut: values.sessionTO,
         permissions : values.permissions
-
       };
       await CinemaApi.invoke('updateUser', updatedUserData);
     }

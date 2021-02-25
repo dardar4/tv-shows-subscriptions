@@ -57,7 +57,7 @@ const UserDetailsToolTip = () => {
     <div>
       User Name:  <span style={{ color: 'yellow' }}>{loggedInUser?.userName}</span> <br />
       <Divider className={classes.dividerColor}></Divider>
-      Session Time out:  <span style={{ color: 'yellow' }}>{loggedInUser?.sessionTO}</span> <br />
+      Session Time out:  <span style={{ color: 'yellow' }}>{loggedInUser?.sessionTimeOut}</span> <br />
       <Divider className={classes.dividerColor}></Divider>
       Permissions:
       <ul>
@@ -87,7 +87,7 @@ const HeaderComp = () => {
   };
 
   const getUserIcon = () => {
-    if (loggedInUser?.fullName) {
+    if (loggedInUser?.firstName) {
       if (loggedInUser.isAdmin) {
         return <FaUserNinja color="yellow" size="1.5rem" />;
       } else {
@@ -125,8 +125,8 @@ const HeaderComp = () => {
               </Tippy>
             </Grid>
             <Grid item>
-              {loggedInUser?.fullName ? (
-                <Typography>Hello, {loggedInUser.fullName}</Typography>
+              {loggedInUser?.firstName ? (
+                <Typography>Hello, {loggedInUser.firstName} {loggedInUser.lastName}</Typography>
               ) : null}
             </Grid>
           </Grid>

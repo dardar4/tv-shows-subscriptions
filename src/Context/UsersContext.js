@@ -7,7 +7,6 @@ const UsersContextProvider = (props) => {
   const [users, setUsers] = useState([]);
   const [updateUsersList, setUpdateUsersList] = useState(false);
   const [userToEdit, setUserToEdit] = useState({})
-  const [displayMode, setDisplayMode] = useState('users');
 
   useEffect(() => {
     const getAllUsersData = async () => {
@@ -21,7 +20,7 @@ const UsersContextProvider = (props) => {
 
   return (
     <UsersContext.Provider 
-        value={{users, setUpdateUsersList, userToEdit, setUserToEdit, displayMode, setDisplayMode}}>
+        value={{ users, setUpdateUsersList, userToEdit, setUserToEdit }}>
       {props.children}
     </UsersContext.Provider>
   );
