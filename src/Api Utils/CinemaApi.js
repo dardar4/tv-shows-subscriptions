@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const CINEMA_API_URL = process.env.REACT_APP_CINEMA_API_URL;
+const CINEMA_API_URL = process.env.REACT_APP_CINEMA_API_URL + '/api';
 
 const handleResponse = (response) => {
     //console.log('CinemaApi::handleResponse', response); //TODO: delete of better logger ?
